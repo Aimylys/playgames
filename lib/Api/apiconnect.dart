@@ -31,7 +31,7 @@ class ApiConnect {
 
       var jsonbody = json.decode(response.body);
 
-      //message d'erreur 401 -> email ou password inval
+      //message d'erreur 401 -> email ou password invalide
       if (response.statusCode == 401) {
         return {
           'status': 'error',

@@ -127,7 +127,6 @@ class _Dames extends State<Dames> {
       ],
     );
   }
-
   //widget retournant un tableau de 8/8 avec tt les cases
   Widget _gameContainer() {
     return Container(
@@ -150,24 +149,13 @@ class _Dames extends State<Dames> {
     final int col = index % 8;
     String couleurCase = _plateau.getCouleurCase(row,col);
     bool isSelected = (row == _plateau.getselectRow() && col == _plateau.getselectCol());
-    bool isAroundSelectedB = _plateau.isAroundSelectedBlack(row, col);
-    bool isAroundSelectedW = _plateau.isAroundSelectedWhite(row, col);
     bool isAroundSelectedF = _plateau.isAroundSelectedFull(row, col);
-    bool Around(){
-      bool around = isAroundSelectedF;
-      if (_plateau.pieceNoire(row, col) == _plateau.isFirstClick()){
-        around = isAroundSelectedB;
-      }
-      if (_plateau.pieceBlanche(row, col) == _plateau.isFirstClick()){
-        around = isAroundSelectedW;
-      }
-      return around;
-    };
 
     return InkWell(
       onTap: () {
         setState(() {
-          if (_plateau.isFirstClick()) {
+          if (_plateau.aUnPion(row,col)) {
+            print ("etat du clic: "+_plateau.aUnPion(row,col).toString());
             // Premier clic : Sélectionne la case si elle contient un pion noir
             if (_plateau.pieceNoire(row, col)) {
               _plateau.setPosition(row, col);
@@ -175,27 +163,27 @@ class _Dames extends State<Dames> {
             if (_plateau.pieceBlanche(row, col)) {
               _plateau.setPosition(row, col);
             }
-          } else {
-            // Deuxième clic : Déplace le pion sélectionné
-            int fromRow = _plateau.getselectRow();
+            print ("liste case dispo: "+_plateau.getCaseDispo().toString());
+            /*int fromRow = _plateau.getselectRow();
             int fromCol = _plateau.getselectCol();
             int toRow = row;
             int toCol = col;
 
             // Vérifie si le déplacement est valide
-            if (_plateau.mouvValid(fromRow, fromCol, toRow, toCol)) {
+            if (_plateau.isAroundSelectedFull == true && _plateau.aUnPion(row,col) == false) {
               _plateau.changeCase(fromRow, fromCol, toRow, toCol);
-            }
+              _plateau.aUnPion(fromRow,fromCol) == _plateau.aUnPion(row,col);
+            }*/
+          } else {
+            print ("etat du clic: "+_plateau.aUnPion(row,col).toString());
 
-            // Réinitialise les variables
-            _plateau.resetPosition();
           }
         });
       },
       child: Container(
         color: isSelected
             ? Colors.redAccent // Couleur pour la case sélectionnée
-            : (Around() ? Colors.red : (couleurCase == "blanche" ? Colors.white : Colors.brown)),
+            : (isAroundSelectedF ? Colors.red : (couleurCase == "blanche" ? Colors.white : Colors.brown)),
         child: Center(
           child: Text(
             "${_plateau.getCasePlateau(row, col)}",
@@ -205,7 +193,6 @@ class _Dames extends State<Dames> {
       ),
     );
   }
-
   //bouton recommencer
   _restartButton() {
     return Padding(
