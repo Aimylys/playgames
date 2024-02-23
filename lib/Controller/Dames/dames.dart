@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'class/plateau.dart';
-import 'class/partie.dart';
+import '../class/plateau.dart';
+import '../class/partie.dart';
 import 'package:flutter/material.dart';
-import '../Vue/connexion.dart';
+import '../../Vue/connexion.dart';
 
 class Dames extends StatefulWidget {
   const Dames({super.key, required this.title});
@@ -53,33 +53,13 @@ class _Dames extends State<Dames> {
             Center(
               child: ListTile(
                 title: const Text(
-                  'Profil',
+                  'Retour au menu',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.brown),
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, '/route6');
+                  Navigator.pushNamed(context, '/menujeux');
                 },
-              ),
-            ),
-            Center(
-              child:
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ConnectPage(title: 'Connexion'),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(135, 120, 97, 5)),
-                child: const Icon(
-                  Icons.power_settings_new,
-                  size: 30,
-                  color: Colors.black,
-                ),
               ),
             ),
           ],

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'Vue/myhomepage.dart';
 import 'Vue/connexion.dart';
 import 'Vue/inscription.dart';
-import 'Controller/dames.dart';
-import 'Vue/regle.dart';
 import 'Vue/profil.dart';
 import 'VUe/classement.dart';
+import 'Vue/menujeux.dart';
+import 'Controller/Dames/dames.dart';
+import 'Controller/Dames/regle.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,10 +29,11 @@ class MyApp extends StatelessWidget {
         '/route1': (BuildContext context) => MyHomePage(title: ''),
         '/route2': (BuildContext context) => ConnectPage(title: ''),
         '/route3': (BuildContext context) => InscriptPage(title: ''),
-        '/route4': (BuildContext context) => Dames(title: ''),
-        '/route5': (BuildContext context) => Regle(title: ''),
-        '/route6': (BuildContext context) => Profil(title: ''),
-        '/route7': (BuildContext context) => Classement(title: ''),
+        '/route4': (BuildContext context) => Profil(title: ''),
+        '/route5': (BuildContext context) => Classement(title: ''),
+        '/menujeux': (BuildContext context) => MenuJeux(title: ''),
+        '/dames': (BuildContext context) => Dames(title: ''),
+        '/reglesdames': (BuildContext context) => Regle(title: ''),
       },
     );
   }

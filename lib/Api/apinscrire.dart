@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<bool> EmailVerifier(String email) async {
-  final response = await http.get(Uri.parse('https://s3-4668.nuage-peda.fr/dame/api/users?email=$email'),);
+  final response = await http.get(Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/users?email=$email'),);
 
   final jsonDonnee = json.decode(response.body);
   final hydramember = jsonDonnee['hydra:member'] as List<dynamic>;
@@ -16,7 +16,7 @@ Future<bool> EmailVerifier(String email) async {
 }
 
 Future<void> inscription(String email, String password, String nom, String prenom) async {
-  final response = await http.post(Uri.parse('https://s3-4668.nuage-peda.fr/dame/api/users'),
+  final response = await http.post(Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/users'),
       headers: {
         'Content-Type': 'application/ld+json',
       },

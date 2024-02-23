@@ -158,7 +158,7 @@ class _ProfilState extends State<Profil> {
               const Padding(padding: const EdgeInsets.only(bottom: 10)),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/route7');
+                    Navigator.pushNamed(context, '/route5');
                   },
                   child: const Text("Classement des joueurs"),
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),

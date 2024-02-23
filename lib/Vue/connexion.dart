@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
-import '../Controller/dames.dart';
+import '../Vue/menujeux.dart';
 import 'dart:io';
 import '../Api/apiconnect.dart';
 import '../Api/apinscrire.dart';
@@ -162,7 +162,7 @@ class _ConnectPageState extends State<ConnectPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Dames(title: ""),
+            builder: (context) => MenuJeux(title: ""),
           ),
         );
       } else {

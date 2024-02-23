@@ -74,7 +74,7 @@ class _MyHomeState extends State<MyHomePage> {
               padding: const EdgeInsets.only(top: 50),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                 const Text(
-                  'Bienvenue sur notre',
+                  'Bienvenue sur',
                   style: TextStyle(
                     color: Colors.brown,
                     fontWeight: FontWeight.bold,
@@ -82,7 +82,7 @@ class _MyHomeState extends State<MyHomePage> {
                   ),
                 ),
                 const Text(
-                  'jeu de Dames !',
+                  'Playdames !',
                   style: TextStyle(
                     color: Colors.brown,
                     fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _MyHomeState extends State<MyHomePage> {
           const Padding(padding: EdgeInsets.only(bottom: 50)),
           ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/route5');
+                Navigator.pushNamed(context, '/reglesdames');
               },
               child: const Text("Règles du jeu"),
               style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),

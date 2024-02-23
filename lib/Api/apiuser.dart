@@ -3,7 +3,7 @@ import 'dart:convert';
 
 Future<Map<String, dynamic>> getUser(String email) async {
   final response = await http.get(
-    Uri.parse('http://s3-4668.nuage-peda.fr/dame/api/users?page=1&email=$email'),
+    Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/users?page=1&email=$email'),
     headers: {'Content-Type': 'application/ld+json',},
   );
 
@@ -43,7 +43,7 @@ Future<Map<String, dynamic>> getUser(String email) async {
 
 Future<List<Map<String, dynamic>>> getListUsers() async {
   final response = await http.get(
-    Uri.parse('http://s3-4668.nuage-peda.fr/dame/api/users?page=1&order%5Bpoints%5D=desc'),
+    Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/users?page=1&order%5Bpoints%5D=desc'),
     headers: {'Content-Type': 'application/ld+json',},
   );
 
