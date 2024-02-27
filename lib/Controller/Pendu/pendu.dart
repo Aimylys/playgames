@@ -1,20 +1,21 @@
 import 'dart:async';
-import '../class/dames.dart';
+import '../class/pendu.dart';
 import '../class/partie.dart';
 import 'package:flutter/material.dart';
 import '../../Vue/connexion.dart';
 
-class Dames extends StatefulWidget {
-  const Dames({super.key, required this.title});
+class Pendu extends StatefulWidget {
+  const Pendu({super.key, required this.title});
 
   final String title;
 
   @override
-  State<Dames> createState() => _Dames();
+  State<Pendu> createState() => _Pendu();
 }
 
-class _Dames extends State<Dames> {
+class _Pendu extends State<Pendu> {
 
+  String _selectLettre = ''; // État pour stocker la lettre sélectionnée
   Plateau _plateau = new Plateau();
   Partie partie = new Partie();
 
@@ -84,6 +85,11 @@ class _Dames extends State<Dames> {
               ),
               const Padding(padding: EdgeInsets.all(10)),
               _headerText(),
+              const SizedBox(height: 20),
+              Text(
+                'Lettre sélectionnée : $_selectLettre', // Afficher la lettre sélectionnée
+                style: TextStyle(fontSize: 20),
+              ),
               const Padding(padding: EdgeInsets.all(10)),
               _gameContainer(),
               const Padding(padding: EdgeInsets.all(10)),
@@ -101,78 +107,60 @@ class _Dames extends State<Dames> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Jeu de Dames",
+          "Jeu du Pendu",
           style: TextStyle(fontSize: 30.0),
         ),
       ],
     );
   }
-  //widget retournant un tableau de 8/8 avec tt les cases
   Widget _gameContainer() {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.height / 2,
       child: GridView.builder(
-        gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-        itemCount: 64,
-        itemBuilder: (context, int index) {
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 13, // 13 cases dans chaque ligne
+        ),
+        itemCount: 26, // 2 lignes avec 13 cases chacune
+        itemBuilder: (context, index) {
           return _box(index);
         },
       ),
     );
   }
 
-  //widget 1 case
   Widget _box(int index) {
-    final int row = index ~/ 8;
-    final int col = index % 8;
-    String couleurCase = _plateau.getCouleurCase(row,col);
-    bool isSelected = (row == _plateau.getselectRow() && col == _plateau.getselectCol());
-    bool isAroundSelectedF = _plateau.isAroundSelectedFull(row, col);
+    final int row = index ~/ 13; // Calculer la ligne en fonction de l'index
+    final int col = index % 13;  // Utiliser le reste de la division pour obtenir la colonne
+    final lettre = _plateau.getCasePlateau(row, col); // Récupérer la lettre pour cette case
 
     return InkWell(
       onTap: () {
         setState(() {
-          if (_plateau.aUnPion(row,col)) {
-            print ("etat du clic: "+_plateau.aUnPion(row,col).toString());
-            // Premier clic : Sélectionne la case si elle contient un pion noir
-            if (_plateau.pieceNoire(row, col)) {
-              _plateau.setPosition(row, col);
-            }
-            if (_plateau.pieceBlanche(row, col)) {
-              _plateau.setPosition(row, col);
-            }
-            print ("liste case dispo: "+_plateau.getCaseDispo().toString());
-            /*int fromRow = _plateau.getselectRow();
-            int fromCol = _plateau.getselectCol();
-            int toRow = row;
-            int toCol = col;
-
-            // Vérifie si le déplacement est valide
-            if (_plateau.isAroundSelectedFull == true && _plateau.aUnPion(row,col) == false) {
-              _plateau.changeCase(fromRow, fromCol, toRow, toCol);
-              _plateau.aUnPion(fromRow,fromCol) == _plateau.aUnPion(row,col);
-            }*/
-          } else {
-            print ("etat du clic: "+_plateau.aUnPion(row,col).toString());
-
-          }
+          //_selectedLetter = letter;
+          // Vous pouvez ajouter des actions ici si nécessaire
+          _MAJSelectLettre(lettre); // Mettre à jour la lettre sélectionnée
         });
       },
       child: Container(
-        color: isSelected
-            ? Colors.redAccent // Couleur pour la case sélectionnée
-            : (isAroundSelectedF ? Colors.red : (couleurCase == "blanche" ? Colors.white : Colors.brown)),
         child: Center(
           child: Text(
-            "${_plateau.getCasePlateau(row, col)}",
+            "$lettre",
             style: const TextStyle(fontSize: 15),
           ),
         ),
       ),
     );
   }
+
+  void _MAJSelectLettre(String lettre) {
+    setState(() {
+      _selectLettre = lettre; // Mettre à jour la lettre sélectionnée
+    });
+  }
+
+
+
   //bouton recommencer
   _restartButton() {
     return Padding(

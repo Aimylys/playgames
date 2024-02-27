@@ -7,6 +7,7 @@ import 'VUe/classement.dart';
 import 'Vue/menujeux.dart';
 import 'Controller/Dames/dames.dart';
 import 'Controller/Dames/regle.dart';
+import 'Controller/Pendu/pendu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/menujeux': (BuildContext context) => MenuJeux(title: ''),
         '/dames': (BuildContext context) => Dames(title: ''),
         '/reglesdames': (BuildContext context) => Regle(title: ''),
+        '/pendu': (BuildContext context) => Pendu(title: ''),
       },
     );
   }
