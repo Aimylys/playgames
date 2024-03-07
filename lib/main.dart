@@ -3,10 +3,11 @@ import 'Vue/myhomepage.dart';
 import 'Vue/connexion.dart';
 import 'Vue/inscription.dart';
 import 'Vue/profil.dart';
-import 'VUe/classement.dart';
+import 'Vue/classement.dart';
 import 'Vue/menujeux.dart';
 import 'Controller/Dames/dames.dart';
 import 'Controller/Dames/regle.dart';
+import 'Vue/vueMemory.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/menujeux': (BuildContext context) => MenuJeux(title: ''),
         '/dames': (BuildContext context) => Dames(title: ''),
         '/reglesdames': (BuildContext context) => Regle(title: ''),
+        '/pageMemory': (BuildContext context) => pageMemory(),
       },
     );
   }
