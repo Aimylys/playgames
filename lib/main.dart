@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:playdames/Controller/Pendu/vuePendu.dart';
 import 'Vue/myhomepage.dart';
 import 'Vue/connexion.dart';
 import 'Vue/inscription.dart';
@@ -8,6 +9,7 @@ import 'Vue/menujeux.dart';
 import 'Controller/Dames/dames.dart';
 import 'Controller/Dames/regle.dart';
 import 'Controller/Pendu/pendu.dart';
+import 'Controller/Pendu/vuePendu.dart';
 
 void main() {
   runApp(const MyApp());
