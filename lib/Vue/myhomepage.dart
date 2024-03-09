@@ -82,7 +82,7 @@ class _MyHomeState extends State<MyHomePage> {
                   ),
                 ),
                 const Text(
-                  'Playdames !',
+                  'PlayGames !',
                   style: TextStyle(
                     color: Colors.brown,
                     fontWeight: FontWeight.bold,
@@ -90,13 +90,6 @@ class _MyHomeState extends State<MyHomePage> {
                   ),
                 ),
               ])),
-          const Padding(padding: EdgeInsets.only(bottom: 50)),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/reglesdames');
-              },
-              child: const Text("Règles du jeu"),
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
         ],
       ),
     );

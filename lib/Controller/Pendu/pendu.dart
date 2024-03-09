@@ -16,6 +16,8 @@ class _Pendu extends State<Pendu> {
   String _selectLettre = '';
   Plateau _plateau = Plateau();
   Partie partie = Partie();
+  String _motAleatoire = '';
+  int _essaisRestants = 7;
 
   @override
   void initState() {
@@ -23,11 +25,13 @@ class _Pendu extends State<Pendu> {
     super.initState();
   }
 
-  void gameInitialize() {
+  void gameInitialize() async {
     _plateau.inittab();
     _plateau.getPlateau();
     _selectLettre = '';
     _tabLettres = [];
+    _essaisRestants = 7;
+    //_motAleatoire = await getMotAleatoireSimple();
   }
 
   @override
@@ -84,6 +88,18 @@ class _Pendu extends State<Pendu> {
               const SizedBox(height: 30, width: 200),
               const Padding(padding: EdgeInsets.all(10)),
               _headerText(),
+              const SizedBox(height: 10),
+              _images(),
+              const SizedBox(height: 20),
+              Text(
+                'Essaie restant : $_essaisRestants',
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 20),
+              Text(
+              'Mot sélectionné : $_motAleatoire',
+              style: const TextStyle(fontSize: 20),
+              ),
               const SizedBox(height: 20),
               Text(
                 'Lettre sélectionnée : $_selectLettre',
@@ -132,6 +148,18 @@ class _Pendu extends State<Pendu> {
       ),
     );
   }
+  Widget _images() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+            Image.asset(
+                'assets/Pendu/$_essaisRestants.png', fit: BoxFit.cover, width: 200),
+        ],
+      ),
+    );
+  }
 
   Widget _box(int index) {
     final int row = index ~/ 13;
@@ -141,8 +169,11 @@ class _Pendu extends State<Pendu> {
     return InkWell(
       onTap: () {
         setState(() {
-          _MAJSelectLettre(lettre);
-          _tabLettres.add(lettre);
+          if (_essaisRestants >= 1 ) {
+            _tabLettres.add(lettre);
+            _essaisRestants = _essaisRestants - 1;
+            _MAJSelectLettre(lettre);
+          }
         });
       },
       child: Container(
