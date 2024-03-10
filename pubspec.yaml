@@ -69,9 +69,7 @@ flutter:
     - assets/images/
     - assets/gifs/
     - assets/profil/
-    - assets/Pendu/
-    - assets/fruitsdurs.txt
-    - assets/fruitssimples.txt
+    - assets/pendu/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,29 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:flutter/services.dart' show rootBundle;
-
-Future<String> loadAssetDurs() async {
-  return await rootBundle.loadString('assets/fruitsdurs.txt');
-}
-
-Future<String> loadAssetSimples() async {
-  return await rootBundle.loadString('assets/fruitsdurssimples.txt');
-}
-
-Future<String> getMotAleatoireDur() async {
-  String contenuFichier = await loadAssetDurs();
-  List<String> mots = contenuFichier.split('\n');
-  Random random = Random();
-  return mots[random.nextInt(mots.length)];
-}
-
-Future<String> getMotAleatoireSimple() async {
-  String contenuFichier = await loadAssetSimples();
-  List<String> mots = contenuFichier.split('\n');
-  Random random = Random();
-  return mots[random.nextInt(mots.length)];
-}
+import 'fruitssimples.dart';
 
 class jeuPendu {
   String _motAleatoire = ''; //motActuel
@@ -32,8 +10,18 @@ class jeuPendu {
   bool _partieTerminee = false;
   bool _partieGagnee = false;
   jeuPendu(){
-    //_motAleatoire = getMotAleatoireSimple();
+    _motAleatoire = getMotAleatoireSimple();
     _progres = List.filled(_motAleatoire.length, '●');
+  }
+
+  String getMotAleatoireSimple() {
+    Random random = Random();
+    int index = random.nextInt(FruitsSimples.mots.length);
+    return FruitsSimples.mots[index];
+  }
+
+  String getMotAleatoire() {
+    return _motAleatoire;
   }
 
   //voir si la lettre selectionné fait partie du mot ou non et si la partie est terminé
@@ -69,21 +57,26 @@ class jeuPendu {
 
 
 
+
+
+
+
+
 //pour le plateau de lettre
 class Plateau {
   int _selectedRow = -1;
   int _selectedCol = -1;
   List<List<String>> _occuper = [
-  ["A","B","C","D","E","F","G","H","I","J","K","L","M"],
-  ["N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+  ["a","b","c","d","e","f","g","h","i","j","k","l","m"],
+  ["n","o","p","q","r","s","t","u","v","w","x","y","z"],
   ];
 
   Plateau();
 
   void inittab(){
     _occuper = [
-      ["A","B","C","D","E","F","G","H","I","J","K","L","M"],
-      ["N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+      ["a","b","c","d","e","f","g","h","i","j","k","l","m"],
+      ["n","o","p","q","r","s","t","u","v","w","x","y","z"],
     ];
   }
 

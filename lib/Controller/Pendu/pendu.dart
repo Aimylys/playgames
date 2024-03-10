@@ -12,12 +12,15 @@ class Pendu extends StatefulWidget {
 }
 
 class _Pendu extends State<Pendu> {
-  List<String> _tabLettres = [];
-  String _selectLettre = '';
+  List<String> _tabLettres = [];//voir toutes les lettres déjà utilisées
+  String _selectLettre = '';//voir quel lettre on a selectionnée
   Plateau _plateau = Plateau();
   Partie partie = Partie();
-  String _motAleatoire = '';
+  jeuPendu jeupendu = jeuPendu();
+  String _motAleatoireEssai = '';
   int _essaisRestants = 7;
+  List<bool> _tabMotVisible = []; //liste pour voir si visible ou nan
+  List<String> _tabMot = []; //stock mot à deviner
 
   @override
   void initState() {
@@ -25,13 +28,15 @@ class _Pendu extends State<Pendu> {
     super.initState();
   }
 
-  void gameInitialize() async {
+  void gameInitialize() {
     _plateau.inittab();
     _plateau.getPlateau();
     _selectLettre = '';
     _tabLettres = [];
     _essaisRestants = 7;
-    //_motAleatoire = await getMotAleatoireSimple();
+    _motAleatoireEssai = jeupendu.getMotAleatoireSimple();
+    _tabMot = _motAleatoireEssai.split('');//décomposé le mot lettre par lettre
+    _tabMotVisible = List.generate(_tabMot.length, (_) => false);//toute les lettres en false pour les cacher
   }
 
   @override
@@ -85,35 +90,62 @@ class _Pendu extends State<Pendu> {
           ),
           child: Column(
             children: [
-              const SizedBox(height: 30, width: 200),
+              const SizedBox(height: 0, width: 200),
               const Padding(padding: EdgeInsets.all(10)),
               _headerText(),
+              const Padding(padding: EdgeInsets.all(10)),
+              _restartButton(),
               const SizedBox(height: 10),
               _images(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Text(
                 'Essaie restant : $_essaisRestants',
                 style: const TextStyle(fontSize: 20),
               ),
+              /*const SizedBox(height: 20),
+              Text(
+              'Mot sélectionné : $_motAleatoireEssai',
+              style: const TextStyle(fontSize: 20),
+              ),*/
               const SizedBox(height: 20),
               Text(
-              'Mot sélectionné : $_motAleatoire',
-              style: const TextStyle(fontSize: 20),
+                'Mot à trouver :',
+                style: const TextStyle(fontSize: 20),
+              ),// Affichez les cases correspondant au nombre de lettres du mot à deviner
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _tabMot.map((letter) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: Center(
+                        child: Text(
+                          // Affichez la lettre si elle est révélée dans _tabMotVisible, sinon affichez une case vide
+                          _tabMotVisible[_tabMot.indexOf(letter)] ? letter : '',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-              const SizedBox(height: 20),
+              /*const SizedBox(height: 20),
               Text(
                 'Lettre sélectionnée : $_selectLettre',
                 style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 10),
-              _gameContainer(),
-              const SizedBox(height: 10),
+              ),*/
+              const SizedBox(height: 20),
               Text(
                 'Lettres utilisées : ${_tabLettres.join(', ')}',
                 style: const TextStyle(fontSize: 20),
               ),
-              const Padding(padding: EdgeInsets.all(10)),
-              _restartButton(),
+              const SizedBox(height: 10),
+              _gameContainer(),
             ],
           ),
         ),
@@ -133,6 +165,62 @@ class _Pendu extends State<Pendu> {
     );
   }
 
+  Widget _images() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Stack( //Stack = superposer texte sur image
+        children: [
+          Image.asset(
+              'assets/pendu/$_essaisRestants.png',
+              fit: BoxFit.cover,
+              width: 200
+          ),
+          if (_tabMotVisible.every((visible) => visible))
+            Positioned(
+              top: 50, // haut
+              left: 20, // gauche
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  border: Border.all(color: Colors.green, width: 2), // Contour rajout
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  'Vous avez gagné',
+                  style: TextStyle(
+                    color: Colors.black, // Couleur du texte
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+          if (_essaisRestants == 0)
+            Positioned(
+              top: 50, // haut
+              left: 20, // gauche
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  border: Border.all(color: Colors.red, width: 2), // Contour rajout
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  'Vous avez perdu',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _gameContainer() {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
@@ -148,18 +236,6 @@ class _Pendu extends State<Pendu> {
       ),
     );
   }
-  Widget _images() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-            Image.asset(
-                'assets/Pendu/$_essaisRestants.png', fit: BoxFit.cover, width: 200),
-        ],
-      ),
-    );
-  }
 
   Widget _box(int index) {
     final int row = index ~/ 13;
@@ -170,9 +246,22 @@ class _Pendu extends State<Pendu> {
       onTap: () {
         setState(() {
           if (_essaisRestants >= 1 ) {
-            _tabLettres.add(lettre);
-            _essaisRestants = _essaisRestants - 1;
             _MAJSelectLettre(lettre);
+            bool lettreTrouvee = false;
+            // Vérifie si lettre appartient au mot
+              // Si oui, révèle lettre
+              for (int i = 0; i < _tabMot.length; i++) {
+                print (_tabMot[i]);
+                print (lettre);
+                if (_tabMot[i] == lettre) {
+                  _tabMotVisible[i] = true;
+                  lettreTrouvee = true;
+                }
+              }
+            if (!lettreTrouvee) {
+              _tabLettres.add(lettre);
+              _essaisRestants--;
+            }
           }
         });
       },
@@ -187,6 +276,7 @@ class _Pendu extends State<Pendu> {
     );
   }
 
+  //affiche la lettre selectionnée
   void _MAJSelectLettre(String lettre) {
     setState(() {
       _selectLettre = lettre;
