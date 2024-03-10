@@ -83,33 +83,29 @@ class _Dames extends State<MenuJeux> {
                     ),
                   ),
                 ])),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dames');
-                  },
-                  child: const Text("Jeu de Dames"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/pendu');
-                  },
-                  child: const Text("Pendu"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dames');
-                  },
-                  child: const Text("Votre jeu"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],)
+            const Padding(padding: EdgeInsets.only(bottom: 50)),ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/pendu');
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.brown,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Image
+                  Image.asset(
+                    'assets/pendu/7.png',
+                    height: 100,
+                  ),
+                  const Text(
+                    "Pendu",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+
           ],
         ),
       ),
