@@ -119,7 +119,7 @@ class _Dames extends State<MenuJeux> {
           children: [
             // Image
             Image.asset(
-              'assets/imagesMemory/interrogation.png',
+              'assets/imagesMemory/point.png',
               height: 100,
             ),
             const Text(
