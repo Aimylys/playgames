@@ -83,7 +83,8 @@ class _Dames extends State<MenuJeux> {
                     ),
                   ),
                 ])),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),ElevatedButton(
+            const Padding(padding: EdgeInsets.only(bottom: 50)),
+            ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/pendu');
               },
@@ -105,6 +106,29 @@ class _Dames extends State<MenuJeux> {
                 ],
               ),
             ),
+      const Padding(padding: EdgeInsets.only(bottom: 50)),
+      ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/pageMemory');
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Colors.brown,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Image
+            Image.asset(
+              'assets/imagesMemory/interrogation.png',
+              height: 100,
+            ),
+            const Text(
+              "Memory",
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
 
           ],
         ),
