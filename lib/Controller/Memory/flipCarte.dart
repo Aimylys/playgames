@@ -95,6 +95,7 @@ class _FlipCarteState extends State<FlipCarte> {
   Widget build(BuildContext context) {
     return _estFini
         ? Scaffold(
+        appBar: AppBar(),
         body: Center(
           child: GestureDetector(
             onTap: () {
@@ -122,7 +123,8 @@ class _FlipCarteState extends State<FlipCarte> {
           ),
         ))
         : Scaffold(
-        body: SafeArea(
+          appBar: AppBar(),
+          body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[

@@ -93,20 +93,33 @@ class _Dames extends State<MenuJeux> {
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
             ],),
             const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/pageMemory');
+                    },
+                    child: const Text("Memory"),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.brown))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
                   onPressed: () {
-
-                    Navigator.pushNamed(context, '/pageMemory');
-                  },
-                  child: const Text("Memory"),
-
                     Navigator.pushNamed(context, '/pendu');
                   },
                   child: const Text("Pendu"),
-
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],),
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith(
+                          (states) => Colors.brown)),
+                )
+              ],
+            ),
             const Padding(padding: EdgeInsets.only(bottom: 50)),
             Row(mainAxisAlignment: MainAxisAlignment.center,children: [
               ElevatedButton(

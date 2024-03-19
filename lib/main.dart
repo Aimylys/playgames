@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:playdames/Vue/tableauScoreMemory.dart';
 import 'Vue/myhomepage.dart';
 import 'Vue/connexion.dart';
 import 'Vue/inscription.dart';
@@ -7,10 +8,9 @@ import 'Vue/classement.dart';
 import 'Vue/menujeux.dart';
 import 'Controller/Dames/dames.dart';
 import 'Controller/Dames/regle.dart';
-
 import 'Vue/vueMemory.dart';
-
 import 'Controller/Pendu/pendu.dart';
+import 'Controller/Memory/scoreMemory.dart';
 
 
 void main() {
@@ -39,10 +39,9 @@ class MyApp extends StatelessWidget {
         '/menujeux': (BuildContext context) => MenuJeux(title: ''),
         '/dames': (BuildContext context) => Dames(title: ''),
         '/reglesdames': (BuildContext context) => Regle(title: ''),
-
         '/pageMemory': (BuildContext context) => pageMemory(),
-
         '/pendu': (BuildContext context) => Pendu(title: ''),
+        '/memory_scores': (BuildContext context) => MemoryScoreEcran(),
 
       },
     );
