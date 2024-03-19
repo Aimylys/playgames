@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.2.2
   flutter_gif: ^0.0.4
   connectivity: ^3.0.3
+  flip_card: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,7 @@ flutter:
     - assets/images/
     - assets/gifs/
     - assets/profil/
+    - assets/imagesMemory/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
