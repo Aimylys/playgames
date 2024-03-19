@@ -13,7 +13,6 @@ class MenuJeux extends StatefulWidget {
 }
 
 class _Dames extends State<MenuJeux> {
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -47,13 +46,13 @@ class _Dames extends State<MenuJeux> {
               ),
             ),
             Center(
-              child:
-              ElevatedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ConnectPage(title: 'Connexion'),
+                      builder: (context) =>
+                          const ConnectPage(title: 'Connexion'),
                     ),
                   );
                 },
@@ -72,54 +71,79 @@ class _Dames extends State<MenuJeux> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(padding: const EdgeInsets.only(top: 50),
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                  const Text(
-                    'Liste de Jeux',
-                    style: TextStyle(
-                      color: Colors.brown,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                ])),
+            Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'Liste de Jeux',
+                        style: TextStyle(
+                          color: Colors.brown,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ])),
             const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dames');
-                  },
-                  child: const Text("Jeu de Dames"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/dames');
+                    },
+                    child: const Text("Jeu de Dames"),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.brown))),
+              ],
+            ),
             const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/pageMemory');
+                    },
+                    child: const Text("Memory"),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.brown))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
                   onPressed: () {
-
-                    Navigator.pushNamed(context, '/pageMemory');
-                  },
-                  child: const Text("Memory"),
-
                     Navigator.pushNamed(context, '/pendu');
                   },
                   child: const Text("Pendu"),
-
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],),
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith(
+                          (states) => Colors.brown)),
+                )
+              ],
+            ),
             const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dames');
-                  },
-                  child: const Text("Votre jeu"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/dames');
+                    },
+                    child: const Text("Votre jeu"),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.brown))),
+              ],
+            )
           ],
         ),
       ),
     );
   }
-
 }
