@@ -47,7 +47,7 @@ class _InscriptPageState extends State<InscriptPage> {
                   FutureBuilder<bool>(
                     future: EmailVerifier(email.text),
                     builder: (context, snapshot) {
-                      final emailExists = snapshot.data;
+                      //final emailExists = snapshot.data;
                       return SizedBox(
                           width: MediaQuery.of(context).size.width * 0.90,
                           child: TextFormField(
@@ -74,11 +74,11 @@ class _InscriptPageState extends State<InscriptPage> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Le champ d\'e-mail ne peut pas être vide';
-                              } else if (!emailValide(value)) {
+                              } else if (!isEmailValid(value)) {
                                 return 'L\'adresse e-mail n\'est pas valide';
-                              } else if (emailExists == false) {
-                                return 'Un compte existe déjà à cet adresse e-mail';
-                              }
+                              }/* else if (emailExists == false) {
+                                return '$emailExists,Un compte existe déjà à cet adresse e-mail';
+                              }*/
                             },
                           ));
                     },

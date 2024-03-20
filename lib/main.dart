@@ -9,6 +9,7 @@ import 'Controller/Dames/dames.dart';
 import 'Controller/Dames/regle.dart';
 import 'Vue/vueMemory.dart';
 import 'Controller/Pendu/pendu.dart';
+import 'Vue/vueMemory.dart';
 
 
 void main() {
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Jeu de Dames',
+      title: 'PlayGames',
       //moyen d'effacer la banderole qui se trouvais en haut à droite
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -39,7 +40,6 @@ class MyApp extends StatelessWidget {
         '/reglesdames': (BuildContext context) => Regle(title: ''),
         '/pageMemory': (BuildContext context) => pageMemory(),
         '/pendu': (BuildContext context) => Pendu(title: ''),
-
       },
     );
   }
