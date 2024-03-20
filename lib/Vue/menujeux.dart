@@ -105,6 +105,7 @@ class _Dames extends State<MenuJeux> {
                     "Pendu",
                     style: TextStyle(fontSize: 16),
                   ),
+
                 ],
               ),
             ),
