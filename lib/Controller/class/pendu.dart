@@ -24,7 +24,6 @@ class jeuPendu {
     return _motAleatoire;
   }
 
-  //voir si la lettre selectionné fait partie du mot ou non et si la partie est terminé
   void selectionnerLettre(String lettre) {
     if (!_partieTerminee) {
       if (_motAleatoire.contains(lettre)) {

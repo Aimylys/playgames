@@ -1,6 +1,9 @@
 import '../class/pendu.dart';
 import '../class/partie.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:playdames/Api/apiuser.dart';
+import 'package:playdames/Api/apiscorependu.dart';
 
 class Pendu extends StatefulWidget {
   const Pendu({Key? key, required this.title}) : super(key: key);
@@ -21,13 +24,15 @@ class _Pendu extends State<Pendu> {
   int _essaisRestants = 7;
   List<bool> _tabMotVisible = []; //liste pour voir si visible ou nan
   List<String> _tabMot = []; //stock mot à deviner
+  Map<String, dynamic> infosPendu = {};
+  Map<String, dynamic> infosUser = {};
 
   @override
   void initState() {
     gameInitialize();
     super.initState();
+    researchinfosUser();
   }
-
   void gameInitialize() {
     _plateau.inittab();
     _plateau.getPlateau();
@@ -35,8 +40,9 @@ class _Pendu extends State<Pendu> {
     _tabLettres = [];
     _essaisRestants = 7;
     _motAleatoireEssai = jeupendu.getMotAleatoireSimple();
-    _tabMot = _motAleatoireEssai.split('');//décomposé le mot lettre par lettre
-    _tabMotVisible = List.generate(_tabMot.length, (_) => false);//toute les lettres en false pour les cacher
+    _tabMot = _motAleatoireEssai.split('');//split = décomposé le mot lettre par lettre
+    _tabMotVisible = List.generate(_tabMot.length, (_) => false);//false pour les cacher
+    //researchinfosUser();
   }
 
   @override
@@ -61,7 +67,7 @@ class _Pendu extends State<Pendu> {
                 ),
               ),
             ),
-            Center(
+            /*Center(
               child: ListTile(
                 title: const Text(
                   'Retour au menu',
@@ -72,6 +78,14 @@ class _Pendu extends State<Pendu> {
                   Navigator.pushNamed(context, '/menujeux');
                 },
               ),
+            ),*/
+            ElevatedButton(
+              onPressed: () {
+                // Appeler la fonction pour mettre à jour la base de données quand on reviens au menu
+                updatePoints(infosPendu['points']);
+                Navigator.pushNamed(context, '/menujeux');
+              },
+              child: Text('Retour au menu'),
             ),
           ],
         ),
@@ -90,11 +104,14 @@ class _Pendu extends State<Pendu> {
           ),
           child: Column(
             children: [
-              const SizedBox(height: 0, width: 200),
-              const Padding(padding: EdgeInsets.all(10)),
-              _headerText(),
-              const Padding(padding: EdgeInsets.all(10)),
-              _restartButton(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _points(), // Points à gauche
+                  _headerText(), // Au milieu
+                  _restartButton(), // Bouton de redémarrage à droite
+                ],
+              ),
               const SizedBox(height: 10),
               _images(),
               const SizedBox(height: 10),
@@ -111,7 +128,7 @@ class _Pendu extends State<Pendu> {
               Text(
                 'Mot à trouver :',
                 style: const TextStyle(fontSize: 20),
-              ),// Affichez les cases correspondant au nombre de lettres du mot à deviner
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _tabMot.map((letter) {
@@ -125,7 +142,7 @@ class _Pendu extends State<Pendu> {
                       ),
                       child: Center(
                         child: Text(
-                          // Affichez la lettre si elle est révélée dans _tabMotVisible, sinon affichez une case vide
+                          // Affichez la lettre si E _tabMotVisible, sinon case vide
                           _tabMotVisible[_tabMot.indexOf(letter)] ? letter : '',
                           style: const TextStyle(fontSize: 20),
                         ),
@@ -150,6 +167,17 @@ class _Pendu extends State<Pendu> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _points() {
+    return Column(
+      children: [
+        Text(
+          'Points : ${infosPendu['points'] ?? "N/A"}',
+          style: TextStyle(fontSize: 30.0),
+        ),
+      ],
     );
   }
 
@@ -262,6 +290,7 @@ class _Pendu extends State<Pendu> {
               _tabLettres.add(lettre);
               _essaisRestants--;
             }
+            _MAJPoints(); // Mettre à jour les points ici
           }
         });
       },
@@ -283,6 +312,21 @@ class _Pendu extends State<Pendu> {
     });
   }
 
+  void _MAJPoints() {
+    setState(() {
+      if (_tabMotVisible.every((visible) => visible)) {
+        infosPendu['points']  = infosPendu['points'] += 5;
+        updatePoints(infosPendu['points']);
+      }
+      if (_essaisRestants == 0) {
+        if(infosPendu['points'] >= 5) {
+          infosPendu['points'] = infosPendu['points'] -= 5;
+          updatePoints(infosPendu['points']);
+        }
+      }
+    });
+  }
+
   Widget _restartButton() {
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -299,4 +343,60 @@ class _Pendu extends State<Pendu> {
       ),
     );
   }
+
+
+  /*Future<void> researchinfosUser() async {
+    //permet de garder en mémoire des données partagées
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var email = localStorage.getString('email');
+    if (email != null) {
+      var infos = await getUser(email);
+      setState(() {
+        infosUser = infos;
+      });
+    } else {
+      print(
+          "L'email ou le token est null. Impossible de récupérer les statistiques.");
+    }
+  }*/
+
+  void researchinfosUser() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var email = localStorage.getString('email');
+    if (email != null) {
+      var infos = await getUser(email);
+      if (infos['id'] != null) {
+        var userId = infos['id'];
+        var score = await getUserScore(userId);
+        if (score != null) {
+          setState(() {
+            infosPendu['points'] = score;//score ici =15
+          });
+        } else {
+          await createUserScore(userId);
+          setState(() {
+            infosPendu['points'] = 10;
+          });
+        }
+      }
+    } else {
+      print("L'email ou le token est null. Impossible de récupérer les statistiques.");
+    }
+  }
+
+  //prend le dernier résultat des points
+  void updatePoints(int newPoints) async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var email = localStorage.getString('email');
+    if (email != null) {
+      var infos = await getUser(email);
+      if (infos['id'] != null) {
+        var userId = infos['id'];
+        await updateUserScore(userId, newPoints); // Mettre à jour les points dans la base de données
+      }
+    } else {
+      print("L'email ou le token est null. Impossible de mettre à jour les statistiques.");
+    }
+  }
+
 }
