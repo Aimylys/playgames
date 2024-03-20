@@ -13,6 +13,7 @@ import 'Controller/Pendu/pendu.dart';
 import 'Controller/Memory/scoreMemory.dart';
 
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Jeu de Dames',
+      title: 'PlayGames',
       //moyen d'effacer la banderole qui se trouvais en haut à droite
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -42,7 +43,6 @@ class MyApp extends StatelessWidget {
         '/pageMemory': (BuildContext context) => pageMemory(),
         '/pendu': (BuildContext context) => Pendu(title: ''),
         '/memory_scores': (BuildContext context) => MemoryScoreEcran(),
-
       },
     );
   }
