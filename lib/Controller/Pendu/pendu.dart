@@ -337,7 +337,7 @@ class _Pendu extends State<Pendu> {
           });
         },
         style: ElevatedButton.styleFrom(
-          primary: const Color.fromARGB(255, 66, 29, 2),
+          backgroundColor: const Color.fromARGB(255, 66, 29, 2),
         ),
         child: const Text("Rejouer"),
       ),
