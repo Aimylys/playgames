@@ -69,9 +69,9 @@ class _ConnectPageState extends State<ConnectPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Le champ d\'e-mail ne peut pas être vide';
-                      } else if (EmailVerifier(value) == false) {
+                      }/* else if (EmailVerifier(value) == false) {
                         return 'Aucun compte n\'existe à cette adresse e-mail';
-                      }
+                      }*/
                       return null; // Return null when there's no error.
                     },
                   ),
@@ -100,9 +100,9 @@ class _ConnectPageState extends State<ConnectPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Le champ du mot de passe ne peut pas être vide';
-                        } else if (EmailVerifier(value) == false) {
+                        }/* else if (EmailVerifier(value) == false) {
                           return 'mot de passe incorrect';
-                        }
+                        }*/
                         return null; // Return null when there's no error.
                       },
                     )),
