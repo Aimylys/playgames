@@ -17,7 +17,7 @@ class ApiConnect {
     };
 
     //url plus vérification et autorisation token
-    var Url = 'http://s3-4668.nuage-peda.fr/playgames/api/authentication_token' + await token();
+    var Url = 'http://s3-4677.nuage-peda.fr/playgames/api/authentication_token' + await token();
 
     //chercher l'url avec le post api
     try {

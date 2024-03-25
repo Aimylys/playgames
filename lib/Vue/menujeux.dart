@@ -91,7 +91,7 @@ class _Dames extends State<MenuJeux> {
                 Navigator.pushNamed(context, '/pendu');
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.brown,
+                backgroundColor: Colors.brown,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +115,7 @@ class _Dames extends State<MenuJeux> {
           Navigator.pushNamed(context, '/pageMemory');
         },
         style: ElevatedButton.styleFrom(
-          primary: Colors.brown,
+          backgroundColor: Colors.brown,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

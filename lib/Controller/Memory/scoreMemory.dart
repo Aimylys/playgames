@@ -9,13 +9,11 @@ class scoreMemory extends StatefulWidget {
 }
 
 class _scoreMemoryState extends State<scoreMemory> {
-  final ApiMemory _apiMemory = ApiMemory();
   late Future<List<int>> _memoryScores;
 
   @override
   void initState() {
     super.initState();
-    _memoryScores = _apiMemory.fetchMemoryScores();
   }
 
   @override

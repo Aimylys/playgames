@@ -5,7 +5,7 @@ import 'dart:convert';
 Future<int?> getUserScore(int userId) async {
   try {
     final response = await http.get(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1&user=$userId'),
+      Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/pendus?page=1&user=$userId'),
       headers: {'Content-Type': 'application/ld+json'},
     );
 
@@ -27,7 +27,7 @@ Future<int?> getUserScore(int userId) async {
 Future<void> createUserScore(int userId) async {
   try {
     final response = await http.post(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus'),
+      Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/pendus'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'user': '/playgames/api/users/$userId', 'score': 0}),
     );
@@ -46,7 +46,7 @@ Future<void> createUserScore(int userId) async {
 Future<void> updateUserScore(int userId, int newScore) async {
   try {
     final response = await http.patch(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus/$userId'),
+      Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/pendus/$userId'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'score': newScore}),
     );
@@ -69,7 +69,7 @@ Future<void> updateUserScore(int userId, int newScore) async {
 //prend tout les points du pendus
 Future<Map<String, dynamic>> getPointPendu() async {
   final response = await http.get(
-    Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1'),
+    Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/pendus?page=1'),
     headers: {'Content-Type': 'application/ld+json',},
   );
 

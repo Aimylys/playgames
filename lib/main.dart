@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.brown,
       ),
-      home: const MyHomePage(title: 'Menu'),
+      home: const MenuJeux(title: 'Menu'),
       routes: <String, WidgetBuilder>{
         '/route1': (BuildContext context) => MyHomePage(title: ''),
         '/route2': (BuildContext context) => ConnectPage(title: ''),
