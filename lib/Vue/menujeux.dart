@@ -98,7 +98,6 @@ class _Dames extends State<MenuJeux> {
                     borderRadius: BorderRadius.circular(10.0), // Ajustez le rayon ici
                   ),
                 ),
-              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -111,6 +110,7 @@ class _Dames extends State<MenuJeux> {
                     "Pendu",
                     style: TextStyle(color: Colors.white,fontSize: 16),
                   ),
+
                 ],
               ),
             ),
@@ -126,7 +126,6 @@ class _Dames extends State<MenuJeux> {
               borderRadius: BorderRadius.circular(10.0), // Ajustez le rayon ici
             ),
           ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -353,7 +353,6 @@ class _Pendu extends State<Pendu> {
           style: TextStyle(
           color: Colors.white,
         ),
-        ),
       ),
     );
   }
@@ -396,6 +395,7 @@ class _Pendu extends State<Pendu> {
     } else {
       print("L'email ou le token est null. Impossible de récupérer les statistiques.");
     }
+
   }
 
   //prend le dernier résultat des points
