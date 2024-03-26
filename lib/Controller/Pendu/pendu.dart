@@ -50,6 +50,7 @@ class _Pendu extends State<Pendu> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.brown,
       ),
       drawer: Drawer(
         child: ListView(
@@ -85,7 +86,10 @@ class _Pendu extends State<Pendu> {
                 updatePoints(infosPendu['points']);
                 Navigator.pushNamed(context, '/menujeux');
               },
-              child: Text('Retour au menu'),
+              child: Text('Retour au menu',
+                style: TextStyle(
+                color: Colors.white,
+              ),),
             ),
           ],
         ),
@@ -104,6 +108,7 @@ class _Pendu extends State<Pendu> {
           ),
           child: Column(
             children: [
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -112,7 +117,7 @@ class _Pendu extends State<Pendu> {
                   _restartButton(), // Bouton de redémarrage à droite
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
               _images(),
               const SizedBox(height: 10),
               Text(
@@ -156,7 +161,7 @@ class _Pendu extends State<Pendu> {
                 'Lettre sélectionnée : $_selectLettre',
                 style: const TextStyle(fontSize: 20),
               ),*/
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Text(
                 'Lettres utilisées : ${_tabLettres.join(', ')}',
                 style: const TextStyle(fontSize: 20),
@@ -336,10 +341,18 @@ class _Pendu extends State<Pendu> {
             gameInitialize();
           });
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 66, 29, 2),
+        style : ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.brown),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0), // Ajustez le rayon ici
+            ),
+          ),
         ),
-        child: const Text("Rejouer"),
+        child: const Text("Rejouer",
+          style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -393,7 +406,7 @@ class _Pendu extends State<Pendu> {
       var infos = await getUser(email);
       if (infos['id'] != null) {
         var userId = infos['id'];
-        await updateUserScore(userId, newPoints); // Mettre à jour les points dans la base de données
+        await updateUserScore(newPoints); // Mettre à jour les points dans la base de données
       }
     } else {
       print("L'email ou le token est null. Impossible de mettre à jour les statistiques.");

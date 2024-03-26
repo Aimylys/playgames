@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:playdames/Vue/tableauScoreMemory.dart';
 import 'Vue/myhomepage.dart';
 import 'Vue/connexion.dart';
-import 'Vue/inscription.dart';
+//import 'Vue/inscription.dart';
+import 'Api/apinscrire.dart';
 import 'Vue/profil.dart';
 import 'Vue/classement.dart';
 import 'Vue/menujeux.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/route1': (BuildContext context) => MyHomePage(title: ''),
         '/route2': (BuildContext context) => ConnectPage(title: ''),
-        '/route3': (BuildContext context) => InscriptPage(title: ''),
+        '/route3': (BuildContext context) => Inscription(title: ''),
         '/route4': (BuildContext context) => Profil(title: ''),
         '/route5': (BuildContext context) => Classement(title: ''),
         '/menujeux': (BuildContext context) => MenuJeux(title: ''),

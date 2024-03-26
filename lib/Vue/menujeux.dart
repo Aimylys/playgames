@@ -17,6 +17,7 @@ class _Dames extends State<MenuJeux> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.brown,
       ),
       drawer: Drawer(
         child: ListView(
@@ -90,9 +91,13 @@ class _Dames extends State<MenuJeux> {
               onPressed: () {
                 Navigator.pushNamed(context, '/pendu');
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
-              ),
+              style : ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.brown),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Ajustez le rayon ici
+                  ),
+                ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -103,7 +108,7 @@ class _Dames extends State<MenuJeux> {
                   ),
                   const Text(
                     "Pendu",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(color: Colors.white,fontSize: 16),
                   ),
 
                 ],
@@ -114,9 +119,13 @@ class _Dames extends State<MenuJeux> {
         onPressed: () {
           Navigator.pushNamed(context, '/pageMemory');
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.brown,
-        ),
+        style : ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.brown),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0), // Ajustez le rayon ici
+            ),
+          ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -127,7 +136,7 @@ class _Dames extends State<MenuJeux> {
             ),
             const Text(
               "Memory",
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(color: Colors.white,fontSize: 16),
             ),
           ],
         ),
