@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         '/reglesdames': (BuildContext context) => Regle(title: ''),
         '/pageMemory': (BuildContext context) => pageMemory(),
         '/pendu': (BuildContext context) => Pendu(title: ''),
-        '/memory_scores': (BuildContext context) => MemoryScoreEcran(),
+        '/memory_scores': (BuildContext context) => scoreMemory(),
       },
     );
   }
