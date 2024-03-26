@@ -406,7 +406,7 @@ class _Pendu extends State<Pendu> {
       var infos = await getUser(email);
       if (infos['id'] != null) {
         var userId = infos['id'];
-        await updateUserScore(userId, newPoints); // Mettre à jour les points dans la base de données
+        await updateUserScore(newPoints); // Mettre à jour les points dans la base de données
       }
     } else {
       print("L'email ou le token est null. Impossible de mettre à jour les statistiques.");

@@ -1,6 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+//prend l'id de la ligne score correspondant au score du l'utilisateur
+/*Future<int?> _getPenduId(int i){
+
+}*/
+
+
 //prend le score d'un user en fonction de son id ,ici on recup bien 1
 Future<int?> getUserScore(int userId) async {
   try {
@@ -43,25 +49,25 @@ Future<void> createUserScore(int userId) async {
 }
 
 //mise à jour des points du user ap partie
-Future<void> updateUserScore(int userId, int newScore) async {
+Future<void> updateUserScore(int newScore) async {
   try {
     final response = await http.patch(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus/$userId'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus'),
+      headers: {'Content-Type': 'application/merge-patch+json'},
       body: jsonEncode({'score': newScore}),
     );
 
-    print(userId);
     print(newScore);
     print(response);
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print('Score mis à jour avec succès pour l\'utilisateur avec l\'ID: $userId');
+      print('Score mis à jour avec succès pour l\'utilisateur avec l\'ID: ');
     } else {
-      print('Échec de la mise à jour du score pour l\'utilisateur avec l\'ID: $userId. Statut code: ${response.statusCode}');
+      print('Échec de la mise à jour du score pour l\'utilisateur avec l\'ID: . Statut code: ${response.statusCode}');
+      print('${response.body}');
     }
   } catch (e) {
-    print('Erreur lors de la mise à jour du score pour l\'utilisateur avec l\'ID: $userId: $e');
+    print('Erreur lors de la mise à jour du score pour l\'utilisateur avec l\'ID: : $e');
   }
 }
 

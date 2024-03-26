@@ -18,6 +18,7 @@ class _ConnectPageState extends State<ConnectPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final id = "";
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +157,7 @@ class _ConnectPageState extends State<ConnectPage> {
         );
       } else {
       // Le user a une connexion internet, lancer les Api
-      var result = await ApiConnect().connexion(email, password);
+      var result = await ApiConnect().connection(email, password);
       if (result['status'] == 'success') {
         // Connexion réussie
         Navigator.pushReplacement(
