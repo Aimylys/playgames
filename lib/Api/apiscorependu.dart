@@ -11,7 +11,7 @@ import 'dart:convert';
 Future<int?> getUserScore(int userId) async {
   try {
     final response = await http.get(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1&user=$userId'),
+      Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1&user=$userId'),
       headers: {'Content-Type': 'application/ld+json'},
     );
 
@@ -33,8 +33,8 @@ Future<int?> getUserScore(int userId) async {
 Future<void> createUserScore(int userId) async {
   try {
     final response = await http.post(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/pendus'),
+      headers: {'Content-Type': 'application/ld+json'},
       body: jsonEncode({'user': '/playgames/api/users/$userId', 'score': 0}),
     );
 
@@ -48,34 +48,11 @@ Future<void> createUserScore(int userId) async {
   }
 }
 
-//mise à jour des points du user ap partie
-Future<void> updateUserScore(int newScore) async {
-  try {
-    final response = await http.patch(
-      Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus'),
-      headers: {'Content-Type': 'application/merge-patch+json'},
-      body: jsonEncode({'score': newScore}),
-    );
-
-    print(newScore);
-    print(response);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      print('Score mis à jour avec succès pour l\'utilisateur avec l\'ID: ');
-    } else {
-      print('Échec de la mise à jour du score pour l\'utilisateur avec l\'ID: . Statut code: ${response.statusCode}');
-      print('${response.body}');
-    }
-  } catch (e) {
-    print('Erreur lors de la mise à jour du score pour l\'utilisateur avec l\'ID: : $e');
-  }
-}
-
 
 //prend tout les points du pendus
 Future<Map<String, dynamic>> getPointPendu() async {
   final response = await http.get(
-    Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1'),
+    Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1'),
     headers: {'Content-Type': 'application/ld+json',},
   );
 

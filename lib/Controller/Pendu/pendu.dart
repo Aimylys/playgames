@@ -1,6 +1,9 @@
 import '../class/pendu.dart';
 import '../class/partie.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:playdames/Api/apiuser.dart';
 import 'package:playdames/Api/apiscorependu.dart';
@@ -26,12 +29,14 @@ class _Pendu extends State<Pendu> {
   List<String> _tabMot = []; //stock mot à deviner
   Map<String, dynamic> infosPendu = {};
   Map<String, dynamic> infosUser = {};
+  String points = "";
+  String userId = "";
 
   @override
   void initState() {
     gameInitialize();
     super.initState();
-    researchinfosUser();
+    //researchinfosUser();
   }
   void gameInitialize() {
     _plateau.inittab();
@@ -42,7 +47,7 @@ class _Pendu extends State<Pendu> {
     _motAleatoireEssai = jeupendu.getMotAleatoireSimple();
     _tabMot = _motAleatoireEssai.split('');//split = décomposé le mot lettre par lettre
     _tabMotVisible = List.generate(_tabMot.length, (_) => false);//false pour les cacher
-    //researchinfosUser();
+    researchinfosUser(userId);
   }
 
   @override
@@ -82,8 +87,6 @@ class _Pendu extends State<Pendu> {
             ),*/
             ElevatedButton(
               onPressed: () {
-                // Appeler la fonction pour mettre à jour la base de données quand on reviens au menu
-                updatePoints(infosPendu['points']);
                 Navigator.pushNamed(context, '/menujeux');
               },
               child: Text('Retour au menu',
@@ -321,14 +324,15 @@ class _Pendu extends State<Pendu> {
     setState(() {
       if (_tabMotVisible.every((visible) => visible)) {
         infosPendu['points']  = infosPendu['points'] += 5;
-        updatePoints(infosPendu['points']);
       }
       if (_essaisRestants == 0) {
         if(infosPendu['points'] >= 5) {
           infosPendu['points'] = infosPendu['points'] -= 5;
-          updatePoints(infosPendu['points']);
         }
       }
+      points = infosPendu['points'].toString();
+      print(points + "Les points");
+      editPoint(userId,points);
     });
   }
 
@@ -357,29 +361,14 @@ class _Pendu extends State<Pendu> {
     ));
   }
 
-
-  /*Future<void> researchinfosUser() async {
-    //permet de garder en mémoire des données partagées
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var email = localStorage.getString('email');
-    if (email != null) {
-      var infos = await getUser(email);
-      setState(() {
-        infosUser = infos;
-      });
-    } else {
-      print(
-          "L'email ou le token est null. Impossible de récupérer les statistiques.");
-    }
-  }*/
-
-  void researchinfosUser() async {
+  //recherche le score du user par rapport à son id
+  void researchinfosUser(userId) async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var email = localStorage.getString('email');
     if (email != null) {
       var infos = await getUser(email);
       if (infos['id'] != null) {
-        var userId = infos['id'];
+        userId = infos['id'];
         var score = await getUserScore(userId);
         if (score != null) {
           setState(() {
@@ -398,18 +387,21 @@ class _Pendu extends State<Pendu> {
 
   }
 
-  //prend le dernier résultat des points
-  void updatePoints(int newPoints) async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var email = localStorage.getString('email');
-    if (email != null) {
-      var infos = await getUser(email);
-      if (infos['id'] != null) {
-        var userId = infos['id'];
-        await updateUserScore(newPoints); // Mettre à jour les points dans la base de données
-      }
+  static Future<void> editPoint(
+      String userId,String points) async {
+    final response = await http.patch(
+      Uri.parse(
+          'https://s3-4668.nuage-peda.fr/playgames/api/pendus/$userId'),
+      headers: <String, String>{
+        'Content-Type': 'application/merge-patch+json',
+      },
+      body: convert.jsonEncode({'score': points}),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
     } else {
-      print("L'email ou le token est null. Impossible de mettre à jour les statistiques.");
+      print('Reponse.body.toString = ' + response.body.toString());
     }
   }
 
