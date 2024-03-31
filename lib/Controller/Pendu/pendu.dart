@@ -332,6 +332,7 @@ class _Pendu extends State<Pendu> {
       }
       points = infosPendu['points'].toString();
       print(points + "Les points");
+      print(userId);
       editPoint(userId,points);
     });
   }
@@ -401,7 +402,9 @@ class _Pendu extends State<Pendu> {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      print('Reponse.body.toString = ' + response.body.toString());
+      //print('Reponse.body.toString = ' + response.body.toString());
+      print(response.statusCode);
+      print('l\'id du user avant envois est :' + userId);
     }
   }
 

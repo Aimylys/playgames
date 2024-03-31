@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../Vue/menujeux.dart';
 import 'dart:io';
 import '../Api/apiconnect.dart';
