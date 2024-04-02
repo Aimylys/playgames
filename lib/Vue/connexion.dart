@@ -18,6 +18,7 @@ class _ConnectPageState extends State<ConnectPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final id = "";
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +70,9 @@ class _ConnectPageState extends State<ConnectPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Le champ d\'e-mail ne peut pas être vide';
-                      } else if (EmailVerifier(value) == false) {
+                      }/* else if (EmailVerifier(value) == false) {
                         return 'Aucun compte n\'existe à cette adresse e-mail';
-                      }
+                      }*/
                       return null; // Return null when there's no error.
                     },
                   ),
@@ -100,9 +101,9 @@ class _ConnectPageState extends State<ConnectPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Le champ du mot de passe ne peut pas être vide';
-                        } else if (EmailVerifier(value) == false) {
+                        }/* else if (EmailVerifier(value) == false) {
                           return 'mot de passe incorrect';
-                        }
+                        }*/
                         return null; // Return null when there's no error.
                       },
                     )),
@@ -156,7 +157,7 @@ class _ConnectPageState extends State<ConnectPage> {
         );
       } else {
       // Le user a une connexion internet, lancer les Api
-      var result = await ApiConnect().connexion(email, password);
+      var result = await ApiConnect().connection(email, password);
       if (result['status'] == 'success') {
         // Connexion réussie
         Navigator.pushReplacement(

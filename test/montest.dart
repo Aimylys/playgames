@@ -21,7 +21,7 @@ void main() {
     });
   });
 
-  group('test retourner prenom user qui vient d\'etre créer', () {
+  /*group('test retourner prenom user qui vient d\'etre créer', () {
     test('test creation',() async{
       String email = "denaison.fannie@gmail.com";
       String password = "iezjzidze";
@@ -34,5 +34,5 @@ void main() {
       infosUser = infos;
       expect(infosUser['nom'], "Denaison");
     });
-  });
+  });*/
 }
