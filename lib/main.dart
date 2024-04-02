@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.brown,
       ),
-      home: const MyHomePage(title: 'Menu'),
+      home: const MenuJeux(title: 'Menu'),
       routes: <String, WidgetBuilder>{
         '/route1': (BuildContext context) => MyHomePage(title: ''),
         '/route2': (BuildContext context) => ConnectPage(title: ''),
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/reglesdames': (BuildContext context) => Regle(title: ''),
         '/pageMemory': (BuildContext context) => pageMemory(),
         '/pendu': (BuildContext context) => Pendu(title: ''),
-        '/memory_scores': (BuildContext context) => MemoryScoreEcran(),
+        '/memory_scores': (BuildContext context) => scoreMemory(),
       },
     );
   }

@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
 import 'dart:developer';
 
+
 class Inscription extends StatefulWidget {
   const Inscription({super.key, required this.title});
+
 
   final String title;
 
   @override
   InscriptionState createState() => InscriptionState();
 }
+
 
 class InscriptionState extends State<Inscription> {
   final _formKey = GlobalKey<FormState>();
