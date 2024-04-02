@@ -30,13 +30,12 @@ class _Pendu extends State<Pendu> {
   Map<String, dynamic> infosPendu = {};
   Map<String, dynamic> infosUser = {};
   String points = "";
-  String userId = "";
+  var userId;
 
   @override
   void initState() {
     gameInitialize();
     super.initState();
-    //researchinfosUser();
   }
   void gameInitialize() {
     _plateau.inittab();
@@ -47,7 +46,8 @@ class _Pendu extends State<Pendu> {
     _motAleatoireEssai = jeupendu.getMotAleatoireSimple();
     _tabMot = _motAleatoireEssai.split('');//split = décomposé le mot lettre par lettre
     _tabMotVisible = List.generate(_tabMot.length, (_) => false);//false pour les cacher
-    researchinfosUser(userId);
+    researchpointUser();
+    mainexemple();
   }
 
   @override
@@ -298,7 +298,7 @@ class _Pendu extends State<Pendu> {
               _tabLettres.add(lettre);
               _essaisRestants--;
             }
-            _MAJPoints(); // Mettre à jour les points ici
+            _MAJPoints(userId); // Mettre à jour les points ici
           }
         });
       },
@@ -320,7 +320,7 @@ class _Pendu extends State<Pendu> {
     });
   }
 
-  void _MAJPoints() {
+  void _MAJPoints(userId) {
     setState(() {
       if (_tabMotVisible.every((visible) => visible)) {
         infosPendu['points']  = infosPendu['points'] += 5;
@@ -332,8 +332,7 @@ class _Pendu extends State<Pendu> {
       }
       points = infosPendu['points'].toString();
       print(points + "Les points");
-      print(userId);
-      editPoint(userId,points);
+      editPoint(int.parse(points));
     });
   }
 
@@ -363,48 +362,69 @@ class _Pendu extends State<Pendu> {
   }
 
   //recherche le score du user par rapport à son id
-  void researchinfosUser(userId) async {
+  void researchpointUser() async {
+    int? userId = await researchUserId();
+    if (userId != null) {
+      var score = await getUserScore(userId);
+      if (score != null) {
+        setState(() {
+          infosPendu['points'] = score; // score ici = 15
+        });
+      } else {
+        await createUserScore(userId);
+        setState(() {
+          infosPendu['points'] = 10;
+        });
+      }
+    } else {
+      print("L'email ou le token est null. Impossible de récupérer les statistiques.");
+    }
+  }
+
+  //recherche le score du user par rapport à son id
+  Future<int?> researchUserId() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var email = localStorage.getString('email');
     if (email != null) {
       var infos = await getUser(email);
       if (infos['id'] != null) {
-        userId = infos['id'];
-        var score = await getUserScore(userId);
-        if (score != null) {
-          setState(() {
-            infosPendu['points'] = score;//score ici =15
-          });
-        } else {
-          await createUserScore(userId);
-          setState(() {
-            infosPendu['points'] = 10;
-          });
-        }
+        return infos['id'];
       }
     } else {
-      print("L'email ou le token est null. Impossible de récupérer les statistiques.");
+      print("Impossible de récupérer l'id du joueur'.");
     }
-
+    return null;
   }
 
-  static Future<void> editPoint(
-      String userId,String points) async {
-    final response = await http.patch(
-      Uri.parse(
-          'https://s3-4668.nuage-peda.fr/playgames/api/pendus/$userId'),
-      headers: <String, String>{
-        'Content-Type': 'application/merge-patch+json',
-      },
-      body: convert.jsonEncode({'score': points}),
-    );
-
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
+  void mainexemple() async {
+    int? userId = await researchUserId();
+    if (userId != null) {
+      print('ID de l\'utilisateur connecté : $userId');
     } else {
-      //print('Reponse.body.toString = ' + response.body.toString());
-      print(response.statusCode);
-      print('l\'id du user avant envois est :' + userId);
+      print('Aucun utilisateur connecté.');
+    }
+  }
+
+  Future<void> editPoint(int points) async {
+    int? userId = await researchUserId();
+    if (userId != null) {
+      final response = await http.patch(
+        Uri.parse(
+            'https://s3-4668.nuage-peda.fr/playgames/api/pendus/$userId'),
+        headers: <String, String>{
+          'Content-Type': 'application/merge-patch+json',
+        },
+        body: convert.jsonEncode({'score': points}),
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        print(response.statusCode);
+        print('L\'ID du user avant envoi est : $userId');
+      }
+    } else {
+      print("Impossible de récupérer l'ID de l'utilisateur.");
     }
   }
 
