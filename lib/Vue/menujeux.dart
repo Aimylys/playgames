@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:playdames/Vue/myhomepage.dart';
 import 'connexion.dart';
 import '../Controller/Dames/dames.dart';
 
@@ -53,7 +54,7 @@ class _Dames extends State<MenuJeux> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          const ConnectPage(title: 'Connexion'),
+                          const MyHomePage(title: 'MenuHomePage'),
                     ),
                   );
                 },

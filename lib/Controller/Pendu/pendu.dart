@@ -364,17 +364,20 @@ class _Pendu extends State<Pendu> {
   //recherche le score du user par rapport à son id
   void researchpointUser() async {
     int? userId = await researchUserId();
+    print(userId);
     if (userId != null) {
       var score = await getUserScore(userId);
+      print(score);
       if (score != null) {
         setState(() {
-          infosPendu['points'] = score; // score ici = 15
+          infosPendu['points'] = score;
         });
       } else {
         await createUserScore(userId);
         setState(() {
           infosPendu['points'] = 10;
         });
+        print("cet id n'a pas de score");
       }
     } else {
       print("L'email ou le token est null. Impossible de récupérer les statistiques.");

@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:convert' as convert;
 
 //prend l'id de la ligne score correspondant au score du l'utilisateur
 /*Future<int?> _getPenduId(int i){
@@ -11,17 +12,16 @@ import 'dart:convert';
 Future<int?> getUserScore(int userId) async {
   try {
     final response = await http.get(
-      Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/pendus?page=1&user=$userId'),
+      Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/pendus/$userId'),
       headers: {'Content-Type': 'application/ld+json'},
     );
 
     if (response.statusCode == 200) {
       var responseData = json.decode(response.body);
-      var scores = responseData['hydra:member'];
-      if (scores.isNotEmpty) {
-        var score = scores[0];
-        return score['score'];
-      }
+      var score = responseData['score'];
+      return score;
+    } else {
+      print('La requête a retourné un code d\'état autre que 200');
     }
   } catch (e) {
     print('Erreur lors de la récupération du score de l\'utilisateur: $e');
@@ -29,23 +29,18 @@ Future<int?> getUserScore(int userId) async {
   return null;
 }
 
-//créer une nouvelle ligne dans pendu avec score = 0 si le user n'a pas de score attitré
-Future<void> createUserScore(int userId) async {
-  try {
-    final response = await http.post(
-      Uri.parse('https://s3-4668.nuage-peda.fr/playgames/api/pendus'),
-      headers: {'Content-Type': 'application/ld+json'},
-      body: jsonEncode({'user': '/playgames/api/users/$userId', 'score': 0}),
-    );
-
-    if (response.statusCode == 201) {
-      print('Score initial créé avec succès pour l\'utilisateur avec l\'ID: $userId');
-    } else {
-      print('Échec de la création du score initial pour l\'utilisateur avec l\'ID: $userId. Statut code: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Erreur lors de la création du score initial pour l\'utilisateur avec l\'ID: $userId: $e');
-  }
+Future<http.Response> createUserScore(int userId) {
+  return http.post(
+    Uri.parse(
+        'https://s3-4668.nuage-peda.fr/playgames/api/pendus'),
+    headers: <String, String>{
+      'Content-Type': 'application/ld+json',
+    },
+    body: convert.jsonEncode(<String, dynamic>{
+      "user": '/playgames/api/users/$userId',
+      "score": 10,
+    }),
+  );
 }
 
 
