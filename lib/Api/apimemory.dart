@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 Future<int?> getMemoryScoreUser(int userId) async {
   try {
     final response = await http.get(
-      Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/memories?page=1&user=$userId'),
+      Uri.parse('http://s3-4677.nuage-peda.frapi_playgames/public//api/memories?page=1&user=$userId'),
       headers: {'Content-Type': 'application/ld+json'},
     );
 
@@ -25,9 +25,9 @@ Future<int?> getMemoryScoreUser(int userId) async {
 Future<void> createMemoryUserScore(int userId) async {
   try {
     final response = await http.post(
-      Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/memories'),
+      Uri.parse('http://s3-4677.nuage-peda.frapi_playgames/public//api/memories'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'user': '/playgames/api/users/$userId', 'scoreM': 0}),
+      body: jsonEncode({'user': 'api_playgames/public//api/users/$userId', 'scoreM': 0}),
     );
 
     if (response.statusCode == 201) {
@@ -43,7 +43,7 @@ Future<void> createMemoryUserScore(int userId) async {
 Future<void> majMemoryUserScore(int userId, int nouveauScore) async {
   try {
     final response = await http.patch(
-      Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/memories/$userId'),
+      Uri.parse('http://s3-4677.nuage-peda.frapi_playgames/public//api/memories/$userId'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'scoreM': nouveauScore}),
     );
@@ -65,7 +65,7 @@ Future<void> majMemoryUserScore(int userId, int nouveauScore) async {
 
 Future<Map<String, dynamic>> getPointMemory() async {
   final response = await http.get(
-    Uri.parse('http://s3-4677.nuage-peda.fr/playgames/api/memories?page=1'),
+    Uri.parse('http://s3-4677.nuage-peda.frapi_playgames/public//api/memories?page=1'),
     headers: {'Content-Type': 'application/ld+json',},
   );
 

@@ -18,7 +18,7 @@ class ApiConnect {
     };
 
     //url plus vérification et autorisation token
-    var Url = 'http://s3-4677.nuage-peda.fr/playgames/api/authentication_token' + await token();
+    var Url = 'http://s3-4677.nuage-peda.fr/api_playgames/public/api/authentication_token' + await token();
 
     //chercher l'url avec le post api
     try {
@@ -30,7 +30,7 @@ class ApiConnect {
         },
       );
       Response reponse = await http.post(
-        Uri.parse('http://s3-4668.nuage-peda.fr/playgames/api/$email'),
+        Uri.parse('http://s3-4677.nuage-peda.fr/api_playgames/public/api/$email'),
         body: jsonEncode(donnee),
         headers: <String, String>{
           'Content-Type': 'application/ld+json; charset=UTF-8',

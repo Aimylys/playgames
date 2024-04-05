@@ -28,7 +28,7 @@ class InscriptionState extends State<Inscription> {
       String email, String password, String nom, String prenom) {
     return http.post(
       Uri.parse(
-          'https://s3-4668.nuage-peda.fr/playgames/api/users'),
+          'http://s3-4677.nuage-peda.fr/api_playgames/public/api/users'),
       headers: <String, String>{
         'Content-Type': 'application/ld+json',
       },
