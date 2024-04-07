@@ -11,7 +11,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomeState extends State<MyHomePage> {
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -34,93 +34,63 @@ class _MyHomeState extends State<MyHomePage> {
             Center(
               child: ListTile(
                 title: const Text(
-                  'Profil',
+                  'Se connecter',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.brown),
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, '/route4');
+                  Navigator.pushNamed(context, '/route2');
                 },
               ),
             ),
             Center(
-              child:
-              ElevatedButton(
-                onPressed: () { },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(135, 120, 97, 5)),
-                child: const Icon(
-                  Icons.power_settings_new,
-                  size: 30,
-                  color: Colors.black,
-                ),
+              child: ListTile(
+                title: const Text('S\'inscire',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.brown)),
+                onTap: () {
+                  Navigator.pushNamed(context, '/route3');
+                },
               ),
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(padding: const EdgeInsets.only(top: 50),
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                  const Text(
-                    'Liste de Jeux',
-                    style: TextStyle(
-                      color: Colors.brown,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
+      body: Column(
+        children: <Widget>[
+      Padding(
+      padding: const EdgeInsets.only(top: 50),
+          child:
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Image.asset('assets/images/checkers.png', fit: BoxFit.cover, width: 200),
+              ],
+            ),
+          )),
+          Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                const Text(
+                  'Bienvenue sur',
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
                   ),
-                ])),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dames');
-                  },
-                  child: const Text("Jeu de Dames"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/pageMemory');
-                    },
-                    child: const Text("Memory"),
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.brown))),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/pendu');
-                  },
-                  child: const Text("Pendu"),
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.brown)),
-                )
-              ],
-            ),
-            const Padding(padding: EdgeInsets.only(bottom: 50)),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/dames');
-                  },
-                  child: const Text("Votre jeu"),
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.brown))),
-            ],)
-          ],
-        ),
+                ),
+                const Text(
+                  'PlayGames !',
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+              ])),
+        ],
       ),
     );
   }

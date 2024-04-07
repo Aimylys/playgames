@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 class ApiConnect {
   token() async {
@@ -10,14 +11,14 @@ class ApiConnect {
     return '?token=$token';
   }
 
-  Future<Map<String, dynamic>> connexion(String email, String password) async {
+  Future<Map<String, dynamic>> connection(String email, String password) async {
     var donnee = {
       'email': email,
       'password': password,
     };
 
     //url plus vérification et autorisation token
-    var Url = 'http://s3-4668.nuage-peda.fr/playgames/api/authentication_token' + await token();
+    var Url = 'https://s3-4677.nuage-peda.fr/api_playgames/public/api/authentication_token' + await token();
 
     //chercher l'url avec le post api
     try {
@@ -28,9 +29,17 @@ class ApiConnect {
           'Content-Type': 'application/ld+json; charset=UTF-8',
         },
       );
+      Response reponse = await http.post(
+        Uri.parse('https://s3-4677.nuage-peda.fr/api_playgames/public/api/$email'),
+        body: jsonEncode(donnee),
+        headers: <String, String>{
+          'Content-Type': 'application/ld+json; charset=UTF-8',
+        },
+      );
 
       var jsonbody = json.decode(response.body);
-
+      log(response.body.toString());
+      log(reponse.body.toString());
       //message d'erreur 401 -> email ou password invalide
       if (response.statusCode == 401) {
         return {
