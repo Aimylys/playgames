@@ -41,6 +41,7 @@ dependencies:
   flutter_gif: ^0.0.4
   connectivity_plus: ^6.0.1
   flip_card: ^0.7.0
+  mockito: ^5.0.7
 
 
 dev_dependencies:

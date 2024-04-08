@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../Vue/menujeux.dart';
 import 'dart:io';
 import '../Api/apiconnect.dart';
-import '../Api/apinscrire.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({Key? key, required this.title}) : super(key: key);
@@ -15,204 +18,143 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-  final id = "";
+  final _formKey = GlobalKey<FormState>();
+  String email = "";
+  String mdp = "";
+  String txtButton = "Se connecter";
+  bool _isLoading = false;
+
+  Map<String, dynamic> dataMap = {};
+  bool recupDataBool = false;
+
+  Future<http.Response> recupConnect(String login, String mdp) {
+    return http.post(
+      Uri.parse(
+          'http://s3-4677.nuage-peda.fr/api_playgames/public/api/authentication_token'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body:
+          convert.jsonEncode(<String, String>{'email': login, 'password': mdp}),
+    );
+  }
+
+  Future<void> recupDataJson() async {
+    var reponse = await recupConnect(email, mdp);
+    if (reponse.statusCode == 200) {
+      dataMap = convert.jsonDecode(reponse.body);
+      recupDataBool = true;
+    } else {
+      print("erreur " + reponse.statusCode.toString());
+    }
+  }
+
+  // methode qui permet la connection si les champs du formulaire sont valides
+  startLoading() async {
+    setState(() {
+      _isLoading = true;
+    });
+    if (_formKey.currentState!.validate()) {
+      await recupDataJson();
+      // si les données ont été récupéré
+      if (recupDataBool) {
+        // on navige vers accueil en détruisant le context actuel
+        Navigator.popAndPushNamed(context, '/menujeux', arguments: dataMap);
+      } else {
+        // sinon on affiche l'erreur et remet le booléen _isLoading à faux
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Erreur dans la connection à la BDD"),
+          ),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      // affiche une erreur concernant la saisie des informations
+      // et remet le booléen _isLoading à faux
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Erreur dans le login/mdp"),
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-        Navigator.pop(context, false);
-        return Future.value(false);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: Colors.brown,
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
-        body: Center(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Padding(padding: EdgeInsets.only(top: 50)),
-                const Text(
-                  'Connectez-vous !!!',
-                  style: TextStyle(
-                    color: Colors.brown,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35,
-                  ),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // login
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Email",
+                      hintText: "Saisir votre email"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Erreur de saisie";
+                    } else {
+                      email = value;
+                    }
+                  },
                 ),
-                const Padding(padding: EdgeInsets.only(top: 50)),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.90,
-                  child: TextFormField(
-                    controller: email,
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueAccent, width: 2.5),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.brown, width: 2.5),
-                      ),
-                      hintText: 'E-mail',
-                      labelStyle: TextStyle(fontSize: 18),
-                    ),
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Le champ d\'e-mail ne peut pas être vide';
-                      }/* else if (EmailVerifier(value) == false) {
-                        return 'Aucun compte n\'existe à cette adresse e-mail';
-                      }*/
-                      return null; // Return null when there's no error.
-                    },
-                  ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+              ),
+              // password
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                child: TextFormField(
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Mot de passe",
+                      hintText: "Saisir votre mot de passe"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Erreur de saisie";
+                    } else {
+                      mdp = value;
+                    }
+                  },
                 ),
-                const Padding(padding: EdgeInsets.only(top: 3.5, bottom: 3.5)),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.90,
-                    child: TextFormField(
-                      controller: password,
-                      decoration: const InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blueAccent, width: 2.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.brown, width: 2.5),
-                        ),
-                        hintText: 'Mot de passe',
-                        labelStyle: TextStyle(fontSize: 15),
-                      ),
-                      obscureText: true,
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Le champ du mot de passe ne peut pas être vide';
-                        }/* else if (EmailVerifier(value) == false) {
-                          return 'mot de passe incorrect';
-                        }*/
-                        return null; // Return null when there's no error.
-                      },
-                    )),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.90,
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 50),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    fixedSize: const Size(150, 40)),
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    // After all validations pass, perform login processing here.
-                                    connexion(email.text,
-                                        password.text);
-                                  }
-                                },
-                                child: const Text(
-                                  "Connexion",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ]))),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: ElevatedButton(
+                  // selon la valeur de _isLoading, le bouton s'adapte
+                  onPressed: _isLoading ? null : startLoading,
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : Text(txtButton),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  connexion(String email, String password) async {
-    //Vérification de la connexion internet
-      var internetConnect = await (Connectivity().checkConnectivity());
-      if (internetConnect == ConnectivityResult.none) {
-        // L'utilisateur n'a pas de connexion Internet
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Aucune connexion Internet. Veuillez vérifier votre connexion.',
-              style: TextStyle(
-                  color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            duration: Duration(seconds: 2), // Définir la durée de la SnackBar
-          ),
-        );
-      } else {
-      // Le user a une connexion internet, lancer les Api
-      var result = await ApiConnect().connection(email, password);
-      if (result['status'] == 'success') {
-        // Connexion réussie
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MenuJeux(title: ""),
-          ),
-        );
-      } else {
-        //Erreurs éventuelles coté serveur en fonction du code récupéré(apiconnect.dart)
-        int erreur = result['code'];
-        if (erreur == 401) {
-          // Identifiants invalides
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Identifiants invalides',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        } else if (erreur == 503) {
-          // Serveurs éteins )
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Serveur momentanément indisponibles',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        } else {
-          // Gérer d'autres erreurs
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Erreur inconnue',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
-      }
-    }
   }
 }

@@ -1,3 +1,5 @@
+// bas les couill
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -18,14 +20,14 @@ class ApiConnect {
     };
 
     //url plus vérification et autorisation token
-    var Url =
+    var url =
         'http://s3-4677.nuage-peda.fr/api_playgames/public/api/authentication_token' +
             await token();
 
     //chercher l'url avec le post api
     try {
       Response response = await http.post(
-        Uri.parse(Url),
+        Uri.parse(url),
         body: jsonEncode(donnee),
         headers: <String, String>{
           'Content-Type': 'application/ld+json; charset=UTF-8',
@@ -43,8 +45,9 @@ class ApiConnect {
 
       var jsonbody = json.decode(response.body);
       var reponseData = json.decode(reponse.body);
-      log(response.body.toString());
-      log(reponse.body.toString());
+      print(response.body.toString());
+      print(reponse.body.toString());
+      print("try en train d'etre effectué");
 
       // Vérifiez si la réponse est réussie et si des données d'utilisateur sont disponibles
       if (reponse.statusCode == 200 && reponseData['hydra:member'] != null) {
