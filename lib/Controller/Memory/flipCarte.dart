@@ -63,6 +63,8 @@ class _FlipCarteState extends State<FlipCarte> {
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       setState(() {
         _time = _time - 1;
+      });
+      setState(() {
         _tempPasse++;
       });
     });
