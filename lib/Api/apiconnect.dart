@@ -18,7 +18,9 @@ class ApiConnect {
     };
 
     //url plus vérification et autorisation token
-    var Url = 'https://s3-4677.nuage-peda.fr/api_playgames/public/api/authentication_token' + await token();
+    var Url =
+        'http://s3-4677.nuage-peda.fr/api_playgames/public/api/authentication_token' +
+            await token();
 
     //chercher l'url avec le post api
     try {
@@ -29,24 +31,31 @@ class ApiConnect {
           'Content-Type': 'application/ld+json; charset=UTF-8',
         },
       );
-      Response reponse = await http.post(
-        Uri.parse('https://s3-4677.nuage-peda.fr/api_playgames/public/api/$email'),
-        body: jsonEncode(donnee),
+
+      Response reponse = await http.get(
+        Uri.parse(
+            'http://s3-4677.nuage-peda.fr/api_playgames/public/api/users?page=1&email=$email'),
+        //body: jsonEncode(email),
         headers: <String, String>{
-          'Content-Type': 'application/ld+json; charset=UTF-8',
+          'Content-Type': 'application/ld+json',
         },
       );
 
       var jsonbody = json.decode(response.body);
+      var reponseData = json.decode(reponse.body);
       log(response.body.toString());
       log(reponse.body.toString());
-      //message d'erreur 401 -> email ou password invalide
-      if (response.statusCode == 401) {
-        return {
-          'status': 'error',
-          'message': 'Identifiants invalides',
-          'code': 401,
-        };
+
+      // Vérifiez si la réponse est réussie et si des données d'utilisateur sont disponibles
+      if (reponse.statusCode == 200 && reponseData['hydra:member'] != null) {
+        var user = reponseData['hydra:member'];
+        var infosUser = user[0];
+        var userId = infosUser['id'];
+        // Maintenant, userId contient l'ID de l'utilisateur connecté, vous pouvez l'utiliser comme nécessaire
+        print('ID de l\'utilisateur connecté : $userId');
+      } else {
+        // Si la réponse est invalide ou si aucune donnée d'utilisateur n'est disponible
+        print('Impossible de récupérer l\'ID de l\'utilisateur connecté.');
       }
 
       //si token n'est pas null alors validé le token et donné l'accès à la bdd
@@ -54,7 +63,8 @@ class ApiConnect {
         SharedPreferences stockage = await SharedPreferences.getInstance();
         stockage.setString('token', jsonbody['token']);
         stockage.setString('email', email);
-        print('Email d\'utilisateur enregistré : ${stockage.getString('email')}');
+        print(
+            'Email d\'utilisateur enregistré : ${stockage.getString('email')}');
 
         return {
           'status': 'success',
