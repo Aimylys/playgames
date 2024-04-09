@@ -64,16 +64,22 @@ class _FlipCarteState extends State<FlipCarte> {
       setState(() {
         _time = _time - 1;
       });
-      setState(() {
-        _tempPasse++;
-      });
+
     });
+  }
+
+  startChrono() {
+    Timer.periodic(const Duration(seconds: 1), (t) {
+      _tempPasse++;
+  });
+
   }
 
   void restart() {
     _tempPasse = 0;
     _score = 0;
     startTimer();
+    startChrono();
     _carte = getTableauImage(
       _niveau,
     );
@@ -87,6 +93,7 @@ class _FlipCarteState extends State<FlipCarte> {
       setState(() {
         _start = true;
         _timer?.cancel();
+        _timerScore?.cancel();
       });
     });
   }
@@ -99,7 +106,8 @@ class _FlipCarteState extends State<FlipCarte> {
 
   @override
   void dispose() {
-    _timerScore?.cancel();
+    _timer?.cancel(); // Annuler la minuterie _timer
+    _timerScore?.cancel(); // Annuler la minuterie _timerScore
     super.dispose();
   }
 
@@ -152,31 +160,45 @@ class _FlipCarteState extends State<FlipCarte> {
         ? Scaffold(
             appBar: AppBar(),
             body: Center(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    restart();
-                  });
-                },
-                child: Container(
-                  height: 50,
-                  width: 200,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const Text(
-                    "Rejouer",
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Votre partie a duré $_tempPasse secondes.',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        restart();
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 200,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: const Text(
+                        "Rejouer",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ))
+            ),
+          )
         : Scaffold(
             appBar: AppBar(),
             body: SafeArea(
