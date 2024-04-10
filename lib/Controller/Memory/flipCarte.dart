@@ -33,6 +33,7 @@ class _FlipCarteState extends State<FlipCarte> {
   int _tempPasse = 0;
   int _score = 0;
   Timer? _timerScore;
+  Timer? _chrono;
 
   _FlipCarteState(this._niveau) {
     // Initialisez les variables ici
@@ -68,8 +69,10 @@ class _FlipCarteState extends State<FlipCarte> {
   }
 
   startChrono() async {
-    Timer.periodic(const Duration(seconds: 1), (t) {
-      _tempPasse++;
+    _chrono = Timer.periodic(const Duration(seconds: 1), (t) {
+      setState(() {
+        _tempPasse++;
+      });
     });
   }
 
@@ -105,6 +108,7 @@ class _FlipCarteState extends State<FlipCarte> {
   @override
   void dispose() {
     _timer?.cancel(); // Annuler la minuterie _timer
+    _chrono?.cancel();
     _timerScore?.cancel(); // Annuler la minuterie _timerScore
     super.dispose();
   }
