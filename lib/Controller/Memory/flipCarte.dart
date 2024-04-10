@@ -59,20 +59,18 @@ class _FlipCarteState extends State<FlipCarte> {
     );
   }
 
-  startTimer() {
+  startTimer() async {
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       setState(() {
         _time = _time - 1;
       });
-
     });
   }
 
-  startChrono() {
+  startChrono() async {
     Timer.periodic(const Duration(seconds: 1), (t) {
       _tempPasse++;
-  });
-
+    });
   }
 
   void restart() {
