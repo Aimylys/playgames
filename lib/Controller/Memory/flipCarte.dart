@@ -3,10 +3,11 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../../Vue/connexion.dart';
 import 'carte.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'dart:convert' as convert;
 
 class FlipCarte extends StatefulWidget {
   final Niveau _niveau;
@@ -32,7 +33,6 @@ class _FlipCarteState extends State<FlipCarte> {
 
   int _tempPasse = 0;
   int _score = 0;
-  Timer? _timerScore;
   Timer? _chrono;
 
   _FlipCarteState(this._niveau) {
@@ -94,7 +94,6 @@ class _FlipCarteState extends State<FlipCarte> {
       setState(() {
         _start = true;
         _timer?.cancel();
-        _timerScore?.cancel();
       });
     });
   }
@@ -109,55 +108,61 @@ class _FlipCarteState extends State<FlipCarte> {
   void dispose() {
     _timer?.cancel(); // Annuler la minuterie _timer
     _chrono?.cancel();
-    _timerScore?.cancel(); // Annuler la minuterie _timerScore
     super.dispose();
   }
 
   int calculScore() {
     if (_tempPasse <= 45) {
-      return 3;
+      _score = 3;
     } else if (_tempPasse <= 120 && _tempPasse > 45) {
-      return 2;
+      _score = 2;
     } else if (_tempPasse <= 180 && _tempPasse > 120) {
-      return 1;
+      _score = 1;
     } else {
-      return 0; // Score nul si le jeu dure plus de 3 minutes
+      _score = 0; 
     }
+    return _score;
   }
 
-  void finDeJeu() {
-    _timerScore?.cancel();
-    _score = calculScore();
-    envoyerScoreAPI(_score);
-  }
+  Future<void> envoyerScoreAPI(int score) async {
+  Map<String, dynamic> scoreData = {
+    'scoreM': score,
+  };
+  String jsonData = convert.jsonEncode(scoreData);
 
-  void envoyerScoreAPI(int score) async {
-    Map<String, dynamic> scoreData = {
-      'scoreM': score,
-    };
-    String jsonData = jsonEncode(scoreData);
+  print('Données JSON envoyées : $jsonData');
 
-    try {
-      http.Response response = await http.post(
-        Uri.parse(
-            'https://s3-4677.nuage-peda.fr/api_playgames/public/api/memories'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonData,
-      );
-      if (response.statusCode == 200) {
-        print('Score envoyé avec succès: $score');
-      } else {
-        print('Echec de l\'envoie du score');
-      }
-    } catch (e) {
-      print('Erreur lors de l\'envoie du score: $e');
+  try {
+    http.Response response = await http.post(
+      Uri.parse('https://s3-4677.nuage-peda.fr/api_playgames/public/api/memories'),
+      headers: <String, String>{
+        'Content-Type': 'application/ld+json', // Utilisez 'application/ld+json' comme type de contenu
+      },
+      body: jsonData,
+    );
+    if (response.statusCode == 200) {
+      print('Score envoyé avec succès: $score');
+      print('Réponse du serveur : ${response.body}');
+    } else {
+      print('Échec de l\'envoi du score. Code d\'état : ${response.statusCode}');
+      print('Réponse du serveur : ${response.body}');
     }
+  } catch (e) {
+    print('Erreur lors de l\'envoi du score: $e');
   }
+}
+
+
+
 
   @override
   Widget build(BuildContext context) {
+    if (_estFini) {
+    _chrono?.cancel(); // Arrêter le chronomètre si le jeu est terminé
+    _score = calculScore();
+    envoyerScoreAPI(_score);
+    }
+
     return _estFini
         ? Scaffold(
             appBar: AppBar(),
@@ -166,7 +171,7 @@ class _FlipCarteState extends State<FlipCarte> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Votre partie a duré $_tempPasse secondes.',
+                    'Votre partie a duré $_tempPasse secondes et vous avez gagner $_score points',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
